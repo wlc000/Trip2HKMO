@@ -37,61 +37,118 @@ function beatXhs(beat) {
   return "";
 }
 
-function photoSlug(file) {
-  return String(file)
-    .replace(/[\\/:*?"<>|]+/g, "")
-    .replace(/\s+/g, "_")
-    .replace(/_+/g, "_");
+function photoItem(item) {
+  if (!item) return null;
+  if (item.imgs || item.img || item.photo) return item;
+  if (item.spotId) return TRIP.spots.find((s) => s.id === item.spotId) || null;
+  return null;
 }
 
-function wikiPhoto(file) {
-  if (!file) return "";
-  if (file.startsWith("photos/") || file.startsWith("img/")) return file;
-  return `photos/${photoSlug(file)}`;
+function sizedPhoto(url, width) {
+  if (!url) return "";
+  const w = Math.max(80, Math.min(width || 1280, 1920));
+  return `${String(url).split("?")[0]}?x-bce-process=image/resize,m_lfit,w_${w}/format,f_auto`;
 }
 
-const PHOTO_HOST = "https://gitee.com/wlc-qc/trip2-hkmo/raw/master/";
-
-function isLocalHost() {
-  const host = location.hostname;
-  return !host || host === "localhost" || host === "127.0.0.1";
+function photoList(item) {
+  const source = photoItem(item);
+  if (!source) return [];
+  if (Array.isArray(source.imgs) && source.imgs.length) return source.imgs.filter(Boolean);
+  if (source.img) return [source.img];
+  return [];
 }
 
-function hostedPhoto(path) {
-  if (!path) return "";
-  if (/^https?:\/\//i.test(path) || isLocalHost()) return path;
-  return PHOTO_HOST + path.replace(/^\//, "");
+function photoSrc(item, width, index) {
+  return sizedPhoto(photoList(item)[index || 0], width);
 }
 
-function photoSrc(item) {
-  if (!item) return "";
-  let path = "";
-  if (item.img) path = item.img;
-  else if (item.spotId) {
-    const spot = TRIP.spots.find((s) => s.id === item.spotId);
-    if (spot && spot.img) path = spot.img;
-  } else if (item.photo) path = wikiPhoto(item.photo);
-  return hostedPhoto(path);
+function baikeUrl(item) {
+  const source = photoItem(item);
+  if (!source || !source.photo) return "https://baike.baidu.com/";
+  return `https://baike.baidu.com/item/${encodeURIComponent(source.photo)}`;
 }
 
-function wikiFile(file) {
-  if (!file) return "https://commons.wikimedia.org/";
-  return `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(file)}`;
+function galleryHtml(item, name) {
+  const urls = photoList(item);
+  if (!urls.length) return "";
+  const many = urls.length > 1;
+  return `<div class="sheet-gallery" data-gallery data-urls="${encodeURIComponent(JSON.stringify(urls))}">
+    <div class="sheet-photo">
+      <img data-gallery-main src="${sizedPhoto(urls[0], 1400)}" alt="${name}" referrerpolicy="no-referrer" />
+      ${
+        many
+          ? `<button class="gal-nav prev" type="button" data-gal="-1" aria-label="上一张">‹</button>
+      <button class="gal-nav next" type="button" data-gal="1" aria-label="下一张">›</button>
+      <span class="gal-count" data-gallery-count>1 / ${urls.length}</span>`
+          : ""
+      }
+      <a class="photo-credit" href="${baikeUrl(item)}" target="_blank" rel="noreferrer">图：百度百科</a>
+    </div>
+    ${
+      many
+        ? `<div class="gal-thumbs">${urls
+            .map(
+              (url, i) =>
+                `<button type="button" data-thumb="${i}" class="${i === 0 ? "is-on" : ""}"><img src="${sizedPhoto(url, 200)}" alt="" referrerpolicy="no-referrer" /></button>`
+            )
+            .join("")}</div>`
+        : ""
+    }
+  </div>`;
+}
+
+function bindGallery(root) {
+  const box = root.querySelector("[data-gallery]");
+  if (!box) return;
+  let urls = [];
+  try {
+    urls = JSON.parse(decodeURIComponent(box.dataset.urls || "[]"));
+  } catch (err) {
+    urls = [];
+  }
+  if (urls.length < 2) return;
+  let i = 0;
+  const main = box.querySelector("[data-gallery-main]");
+  const count = box.querySelector("[data-gallery-count]");
+  function show(n) {
+    i = (n + urls.length) % urls.length;
+    if (main) main.src = sizedPhoto(urls[i], 1400);
+    if (count) count.textContent = `${i + 1} / ${urls.length}`;
+    box.querySelectorAll("[data-thumb]").forEach((el, idx) => el.classList.toggle("is-on", idx === i));
+  }
+  box.addEventListener("click", (e) => {
+    const step = e.target.closest("[data-gal]");
+    if (step) {
+      e.preventDefault();
+      e.stopPropagation();
+      show(i + Number(step.dataset.gal));
+    }
+    const thumb = e.target.closest("[data-thumb]");
+    if (thumb) {
+      e.preventDefault();
+      e.stopPropagation();
+      show(Number(thumb.dataset.thumb));
+    }
+  });
+  box._galleryShow = show;
+  box._galleryIndex = () => i;
 }
 
 function renderSpots() {
   const spots = TRIP.spots.filter(matches);
   grid.innerHTML = spots
     .map((spot) => {
-      const src = photoSrc(spot);
+      const src = photoSrc(spot, 720);
+      const n = photoList(spot).length;
       return `
         <button class="spot-card" data-id="${spot.id}">
           <div class="thumb">
-            ${src ? `<img src="${src}" alt="${spot.name}" loading="lazy" />` : ""}
+            ${src ? `<img src="${src}" alt="${spot.name}" loading="lazy" referrerpolicy="no-referrer" />` : ""}
             <div class="badge-row">
               <span class="badge">${spot.city === "hk" ? "香港" : "澳门"}</span>
               <span class="badge gold">${spot.area}</span>
             </div>
+            ${n > 1 ? `<span class="pic-count">${n} 张实地照片</span>` : ""}
           </div>
           <div class="spot-body">
             <div class="en">${spot.en}</div>
@@ -123,10 +180,6 @@ function beatLatLng(beat) {
   }
   if (beat.lat != null && beat.lng != null) return [beat.lat, beat.lng];
   return null;
-}
-
-function beatPhoto(beat) {
-  return photoSrc(beat);
 }
 
 function pinLabel(beat) {
@@ -339,12 +392,12 @@ function planIcon(on) {
 }
 
 function photoIcon(beat, on) {
-  const src = beatPhoto(beat);
+  const src = photoSrc(beat, 240);
   const label = pinLabel(beat);
   return L.divIcon({
     className: "",
     html: `<div class="photo-pin ${beat.type}${on ? " is-on" : ""}">${
-      src ? `<img src="${src}" alt="${label}" />` : ""
+      src ? `<img src="${src}" alt="${label}" referrerpolicy="no-referrer" />` : ""
     }<span class="tag">${label}</span></div>`,
     iconSize: [54, 62],
     iconAnchor: [27, 58]
@@ -475,19 +528,11 @@ function openSpot(id) {
   if (!spot) return;
   const saved = liked.has(spot.id);
   const keywords = spot.xhs || [];
-  const src = photoSrc(spot);
   modal.hidden = false;
   modal.classList.add("is-open");
   modal.innerHTML = `
     <div class="sheet">
-      ${
-        src
-          ? `<div class="sheet-photo">
-        <img src="${src}" alt="${spot.name}" />
-        <a class="photo-credit" href="${wikiFile(spot.photo)}" target="_blank" rel="noreferrer">图：维基共享资源</a>
-      </div>`
-          : ""
-      }
+      ${galleryHtml(spot, spot.name)}
       <div class="sheet-body">
         <button class="close" type="button" data-close>×</button>
         <div class="en">${spot.city === "hk" ? "Hong Kong" : "Macao"} · ${spot.area}</div>
@@ -519,6 +564,7 @@ function openSpot(id) {
         </div>
       </div>
     </div>`;
+  bindGallery(modal);
 }
 
 function closeModal() {
@@ -533,20 +579,12 @@ function openBeatSheet(beat) {
     openSpot(beat.spotId);
     return;
   }
-  const src = photoSrc(beat);
   const xhs = beatXhs(beat);
   modal.hidden = false;
   modal.classList.add("is-open");
   modal.innerHTML = `
     <div class="sheet">
-      ${
-        src
-          ? `<div class="sheet-photo">
-        <img src="${src}" alt="${beat.name}" />
-        <a class="photo-credit" href="${wikiFile(beat.photo)}" target="_blank" rel="noreferrer">图：维基共享资源</a>
-      </div>`
-          : ""
-      }
+      ${galleryHtml(beat, beat.name)}
       <div class="sheet-body">
         <button class="close" type="button" data-close>×</button>
         <div class="en">${TYPE_LABEL[beat.type] || ""} · ${beat.time}${beat.mode ? " · " + beat.mode : ""}</div>
@@ -565,6 +603,7 @@ function openBeatSheet(beat) {
         }
       </div>
     </div>`;
+  bindGallery(modal);
 }
 
 filtersEl.addEventListener("click", (e) => {
@@ -598,6 +637,10 @@ modal.addEventListener("click", (e) => {
 
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") closeModal();
+  const box = modal.querySelector("[data-gallery]");
+  if (!box || !box._galleryShow || modal.hidden) return;
+  if (e.key === "ArrowRight") box._galleryShow(box._galleryIndex() + 1);
+  if (e.key === "ArrowLeft") box._galleryShow(box._galleryIndex() - 1);
 });
 
 const mapCityFiltersEl = document.getElementById("map-city-filters");
@@ -613,11 +656,11 @@ function citySpots() {
 }
 
 function pinIcon(spot, on) {
-  const src = photoSrc(spot);
+  const src = photoSrc(spot, 240);
   return L.divIcon({
     className: "",
     html: `<div class="photo-pin map spot ${spot.city}${on ? " is-on" : ""}">${
-      src ? `<img src="${src}" alt="${spot.name}" />` : ""
+      src ? `<img src="${src}" alt="${spot.name}" referrerpolicy="no-referrer" />` : ""
     }<span class="tag">${spot.name}</span></div>`,
     iconSize: [56, 66],
     iconAnchor: [28, 62]
@@ -644,7 +687,7 @@ function renderAtlasList(spots) {
     .map(
       (spot, i) => `
       <button class="atlas-item ${spot.city}${spot.id === activeMapId ? " is-on" : ""}" data-map-id="${spot.id}">
-        <span class="n">${spot.img || spot.photo ? `<img src="${photoSrc(spot)}" alt="" />` : i + 1}</span>
+        <span class="n">${photoList(spot).length ? `<img src="${photoSrc(spot, 200)}" alt="" referrerpolicy="no-referrer" />` : i + 1}</span>
         <span>
           <h3>${spot.name}</h3>
           <small>${spot.area} · ${spot.en}</small>

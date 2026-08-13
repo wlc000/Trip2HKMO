@@ -13,8 +13,13 @@ window.TRIP = {
       duration: "1–1.5 小时",
       note: "8 月室内冷气足，带薄外套。免费区域已经够逛、够拍。展厅和监狱旧址保持安静，别用灯、别挡路。",
       xhs: ["香港大馆拍照", "大馆红砖情侣", "大馆旋转楼梯"],
-      photo: "Tai Kwun Parade Ground 201806.jpg",
-      img: "photos/taikwun.jpg",
+      photo: "中区警署建筑群",
+      img: "https://bkimg.cdn.bcebos.com/pic/91ef76c6a7efce1b9d162b0b3108e4deb48f8d54cfe2",
+      imgs: [
+        "https://bkimg.cdn.bcebos.com/pic/91ef76c6a7efce1b9d162b0b3108e4deb48f8d54cfe2",
+        "https://bkimg.cdn.bcebos.com/pic/b219ebc4b74543a96416c4f913178a82b90114f1",
+        "https://bkimg.cdn.bcebos.com/pic/9345d688d43f8794c3601f44d51b0ef41bd53a38"
+      ],
       fallback: "#6b3a2a",
       map: "Tai Kwun Central Hong Kong",
       lat: 22.2814,
@@ -31,8 +36,13 @@ window.TRIP = {
       duration: "30–40 分钟",
       note: "扶梯主要单向：大约上午 6:00–10:00 向下，其余时间向上，别逆行挡路。街拍点到为止，不要长时间占台阶。",
       xhs: ["半山扶梯拍照", "石板街香港", "嘉咸街壁画"],
-      photo: "Central-Mid-Levels Escalator and Walkway System 20-05-2022.jpg",
-      img: "photos/escalator.jpg",
+      photo: "中环至半山自动扶梯系统",
+      img: "https://bkimg.cdn.bcebos.com/pic/a8773912b31bb0515b2ddbc53c7adab44bede0d6",
+      imgs: [
+        "https://bkimg.cdn.bcebos.com/pic/a8773912b31bb0515b2ddbc53c7adab44bede0d6",
+        "https://bkimg.cdn.bcebos.com/pic/caae68096ae893bc2fddd456",
+        "https://bkimg.cdn.bcebos.com/pic/9345d688d43f8794c3601f44d51b0ef41bd53a38"
+      ],
       fallback: "#c45c2a",
       map: "Mid-Levels Escalator Hong Kong",
       lat: 22.2830,
@@ -49,8 +59,13 @@ window.TRIP = {
       duration: "1–1.5 小时",
       note: "先拍游泳池那栋白建筑和楼群同框，再沿海滨走到卑路乍湾。8 月很晒，带帽子。泳池不要翻栏杆、不要影响泳客。科士街是民居楼梯，拍完就走。想拍日落就改晚上来，和第 1 天卢吉道冲突。",
       xhs: ["坚尼地城游泳池拍照", "卑路乍湾海滨", "科士街楼梯"],
-      photo: "Kennedy Town Swimming Pool 09-03-2024.jpg",
-      img: "photos/kennedy.jpg",
+      photo: "坚尼地城",
+      img: "https://bkimg.cdn.bcebos.com/pic/b3119313b07eca808a80608e9d2397dda04483d6",
+      imgs: [
+        "https://bkimg.cdn.bcebos.com/pic/b3119313b07eca808a80608e9d2397dda04483d6",
+        "https://bkimg.cdn.bcebos.com/pic/1b0d4f0f25faea396059f33c",
+        "https://bkimg.cdn.bcebos.com/pic/8c511fe911021e2cb80e2d33"
+      ],
       fallback: "#3d7a8c",
       map: "Kennedy Town Swimming Pool Hong Kong",
       lat: 22.2813,
@@ -67,8 +82,12 @@ window.TRIP = {
       duration: "40–50 分钟",
       note: "先拍本部大楼红砖和棕榈树，再看陆佑堂。校园有坡，穿运动鞋。上课时段保持安静，不要挡路、不要进楼拍。8 月底暑假人少，更好拍。",
       xhs: ["香港大学本部大楼", "港大拍照", "港大陆佑堂"],
-      photo: "University of Hong Kong Main Building.jpg",
-      img: "photos/hku.jpg",
+      photo: "香港大学本部大楼",
+      img: "https://bkimg.cdn.bcebos.com/pic/ae826731e49d445deac4af2b",
+      imgs: [
+        "https://bkimg.cdn.bcebos.com/pic/ae826731e49d445deac4af2b",
+        "https://bkimg.cdn.bcebos.com/pic/fd039245d688d43fbd622317731ed21b0ff43b0f"
+      ],
       fallback: "#5c3d2e",
       map: "HKU Main Building Pokfulam",
       lat: 22.2840,
@@ -85,8 +104,13 @@ window.TRIP = {
       duration: "1.5–2 小时（含上山）",
       note: "不要只去凌霄阁排队。8 月底日落大约 18:50，建议 17:30 后到。山路有蚊，带薄外套。雨天路滑。",
       xhs: ["卢吉道观景台", "太平山卢吉道日落", "卢吉道情侣"],
-      photo: "Hong Kong Night Skyline.jpg",
-      img: "photos/lugard.jpg",
+      photo: "卢吉道",
+      img: "https://bkimg.cdn.bcebos.com/pic/ca1349540923dd5453db1dbfdf09b3de9d8248b8",
+      imgs: [
+        "https://bkimg.cdn.bcebos.com/pic/ca1349540923dd5453db1dbfdf09b3de9d8248b8",
+        "https://bkimg.cdn.bcebos.com/pic/4b90f603738da9778c48fd58b451f8198618e35a",
+        "https://bkimg.cdn.bcebos.com/pic/2fdda3cc7cd98d10ceb49e32253fb80e7bec9055"
+      ],
       fallback: "#1d3a4a",
       map: "Lugard Road Lookout Victoria Peak",
       lat: 22.2712,
@@ -103,8 +127,12 @@ window.TRIP = {
       duration: "单程约 10 分钟",
       note: "坐上层、靠海一侧。手机广角别开太狠。风大，帽子和薄外套收好。",
       xhs: ["天星小轮拍照", "天星小轮上层", "维港天星小轮"],
-      photo: "2019-08-07 A Star Ferry on Victoria Harbour at night (1).jpg",
-      img: "photos/starferry.jpg",
+      photo: "天星小轮",
+      img: "https://bkimg.cdn.bcebos.com/pic/f11f3a292df5e0fe992522adbd3823a85edf8db1d45c",
+      imgs: [
+        "https://bkimg.cdn.bcebos.com/pic/f11f3a292df5e0fe992522adbd3823a85edf8db1d45c",
+        "https://bkimg.cdn.bcebos.com/pic/8ad4b31c8701a18b87d6f51bb775100828381f305016"
+      ],
       fallback: "#2c5f6e",
       map: "Star Ferry Tsim Sha Tsui Pier",
       lat: 22.2937,
@@ -121,8 +149,13 @@ window.TRIP = {
       duration: "45 分钟–1 小时",
       note: "幻彩咏香江大约 20:00。晚上人多，沿堤岸往西九方向会疏一点。8 月很热，拍完可进海港城。",
       xhs: ["尖沙咀钟楼夜景", "维港海滨拍照", "幻彩咏香江"],
-      photo: "Former Kowloon-Canton Railway Clock Tower (Hong Kong).jpg",
-      img: "photos/harbour.jpg",
+      photo: "前九广铁路钟楼",
+      img: "https://bkimg.cdn.bcebos.com/pic/562c11dfa9ec8a13fb67f2c4f503918fa0ecc091",
+      imgs: [
+        "https://bkimg.cdn.bcebos.com/pic/562c11dfa9ec8a13fb67f2c4f503918fa0ecc091",
+        "https://bkimg.cdn.bcebos.com/pic/8ad4b31c8701a18b87d6f51bb775100828381f305016",
+        "https://bkimg.cdn.bcebos.com/pic/a8014c086e061d95c818556f7cf40ad162d9ca0f"
+      ],
       fallback: "#0f2740",
       map: "Tsim Sha Tsui Clock Tower Hong Kong",
       lat: 22.2938,
@@ -139,8 +172,12 @@ window.TRIP = {
       duration: "园区 40 分钟；进馆约 1.5 小时",
       note: "只拍外观和园区不必买票。台风或暴雨可把这里当室内备选。馆内按展览规定，通常不能用闪光灯。",
       xhs: ["M+博物馆拍照", "西九M+大字", "M+艺术公园"],
-      photo: "M+, West Kowloon, Hong Kong.jpg",
-      img: "photos/mplus.jpg",
+      photo: "M+博物馆",
+      img: "https://bkimg.cdn.bcebos.com/pic/b8389b504fc2d56285353ccc734087ef76c6a7efc6ca",
+      imgs: [
+        "https://bkimg.cdn.bcebos.com/pic/b8389b504fc2d56285353ccc734087ef76c6a7efc6ca",
+        "https://bkimg.cdn.bcebos.com/pic/ac6eddc451da81cb39db20de783fc7160924ab189bd5"
+      ],
       fallback: "#4a5560",
       map: "M+ Museum West Kowloon",
       lat: 22.3017,
@@ -157,8 +194,11 @@ window.TRIP = {
       duration: "10–20 分钟",
       note: "安静拍、不挡路、不用灯、不躺、不喊。有时会劝离，尊重即走。不要跟居民对拍。",
       xhs: ["海山楼怪兽大厦", "鲗鱼涌海山楼拍照", "怪兽大厦天井"],
-      photo: "Looking upward at the Yick Cheong Building, 13 June 2019.jpg",
-      img: "photos/monster.jpg",
+      photo: "鲗鱼涌",
+      img: "https://bkimg.cdn.bcebos.com/pic/2934349b033b5bb57fc483003cd3d539b600bc39",
+      imgs: [
+        "https://bkimg.cdn.bcebos.com/pic/2934349b033b5bb57fc483003cd3d539b600bc39"
+      ],
       fallback: "#d4786a",
       map: "Yick Cheong Building Quarry Bay",
       lat: 22.2850,
@@ -175,8 +215,13 @@ window.TRIP = {
       duration: "30–40 分钟",
       note: "8 月下午暴晒，建议吃饭前后或晚上再去。人多、注意随身物品。天桥上别长时间挡路。",
       xhs: ["弥敦道天桥夜景", "旺角天桥拍照", "旺角霓虹"],
-      photo: "HK MK 旺角 Mongkok 彌敦道 Nathan Road n Mong Kok Road footbridge n blue Subaru car November 2025 N13P 01.jpg",
-      img: "photos/mongkok.jpg",
+      photo: "弥敦道",
+      img: "https://bkimg.cdn.bcebos.com/pic/b3b7d0a20cf431adcbefa425cc7cbbaf2edda3cc32de",
+      imgs: [
+        "https://bkimg.cdn.bcebos.com/pic/b3b7d0a20cf431adcbefa425cc7cbbaf2edda3cc32de",
+        "https://bkimg.cdn.bcebos.com/pic/023b5bb5c9ea15ce0b3cc482bc003af33b87b26e",
+        "https://bkimg.cdn.bcebos.com/pic/242dd42a2834349b033b2b9102bc02ce36d3d53910d2"
+      ],
       fallback: "#7a1f2b",
       map: "Nathan Road Mong Kok footbridge",
       lat: 22.3193,
@@ -193,8 +238,13 @@ window.TRIP = {
       duration: "一整天（约 8–10 小时）",
       note: "出发前下载官方 App，看排队和巡游时间。中午湿热，多进室内。城堡和大街人少时先拍。行李尽量少带。",
       xhs: ["香港迪士尼城堡拍照", "港迪美国小镇大街", "港迪城堡情侣"],
-      photo: "Hong Kong Disneyland Castle.jpg",
-      img: "photos/disney.jpg",
+      photo: "睡美人城堡",
+      img: "https://bkimg.cdn.bcebos.com/pic/adaf2edda3cc7cd9bcdd3b773701213fb90e91af",
+      imgs: [
+        "https://bkimg.cdn.bcebos.com/pic/adaf2edda3cc7cd9bcdd3b773701213fb90e91af",
+        "https://bkimg.cdn.bcebos.com/pic/d62a6059252dd42a2834abef99774cb5c9ea15ce1268",
+        "https://bkimg.cdn.bcebos.com/pic/e4dde71190ef76c64bef57709b16fdfaaf5167a8"
+      ],
       fallback: "#2f6b4f",
       map: "Hong Kong Disneyland Castle",
       lat: 22.3132,
@@ -211,8 +261,13 @@ window.TRIP = {
       duration: "30–40 分钟",
       note: "请第 4 天 8:30 前到。11:00 后几乎拍不到两人。侧拍、低机位，不要站正中间跟人堆叠在一起。",
       xhs: ["大三巴清晨拍照", "大三巴情侣机位", "大三巴牌坊侧拍"],
-      photo: "Ruins of Saint Paul's.jpg",
-      img: "photos/stpaul.jpg",
+      photo: "大三巴牌坊",
+      img: "https://bkimg.cdn.bcebos.com/pic/d009b3de9c82d158ccbfa3e640520ed8bc3eb135e469",
+      imgs: [
+        "https://bkimg.cdn.bcebos.com/pic/d009b3de9c82d158ccbfa3e640520ed8bc3eb135e469",
+        "https://bkimg.cdn.bcebos.com/pic/58ee3d6d55fbb2fbb750561c484a20a44623dc41",
+        "https://bkimg.cdn.bcebos.com/pic/242dd42a2834349b033bb78e86b102ce36d3d539103e"
+      ],
       fallback: "#c4b49a",
       map: "Ruins of St Paul's Macau",
       lat: 22.1974,
@@ -229,8 +284,12 @@ window.TRIP = {
       duration: "15–20 分钟",
       note: "巷子很短，排队拍照请快。旁边疯堂斜巷人更少、墙面同样好拍。不要堵住整条巷。",
       xhs: ["澳门恋爱巷", "恋爱巷路牌", "疯堂斜巷"],
-      photo: "Travessa da Paixão.jpg",
-      img: "photos/paixao.jpg",
+      photo: "澳门恋爱巷",
+      img: "https://bkimg.cdn.bcebos.com/pic/e7cd7b899e510fb30f2447581179df95d143ac4ba6e0",
+      imgs: [
+        "https://bkimg.cdn.bcebos.com/pic/e7cd7b899e510fb30f2447581179df95d143ac4ba6e0",
+        "https://bkimg.cdn.bcebos.com/pic/738b4710b912c8fcc3ce6adbfb5f8545d688d43f8b2b"
+      ],
       fallback: "#e8b4a2",
       map: "Travessa da Paixão Macau",
       lat: 22.1970,
@@ -247,8 +306,13 @@ window.TRIP = {
       duration: "40 分钟",
       note: "和大三巴、恋爱巷是同一条步行线，不要拆开跑。正午地面反光强、人多，早晨或晚饭后更合适。",
       xhs: ["议事亭前地波浪纹", "玫瑰堂澳门拍照", "议事亭前地"],
-      photo: "Largo do Senado 1110301.jpg",
-      img: "photos/senado.jpg",
+      photo: "议事亭前地",
+      img: "https://bkimg.cdn.bcebos.com/pic/8644ebf81a4c510fd9f902c33f01322dd42a29340feb",
+      imgs: [
+        "https://bkimg.cdn.bcebos.com/pic/8644ebf81a4c510fd9f902c33f01322dd42a29340feb",
+        "https://bkimg.cdn.bcebos.com/pic/a686c9177f3e6709c93d237a6a90883df8dcd000ffa5",
+        "https://bkimg.cdn.bcebos.com/pic/5bafa40f4bfbfbedab6489ea28a7e036afc37931b155"
+      ],
       fallback: "#d4a017",
       map: "Senado Square Macau",
       lat: 22.1935,
@@ -265,8 +329,11 @@ window.TRIP = {
       duration: "45 分钟",
       note: "山路有点陡。第 3 天下午大三巴人最多时，改来这里更值。风大，注意安全，不要翻越栏杆。",
       xhs: ["主教山小堂", "西望洋圣堂拍照", "主教山情侣"],
-      photo: "Capela de Nossa Senhora da Penha (Macau) 01.JPG",
-      img: "photos/penha.jpg",
+      photo: "主教山小堂",
+      img: "https://bkimg.cdn.bcebos.com/pic/8c1001e93901213fdc9669b553e736d12f2e9535",
+      imgs: [
+        "https://bkimg.cdn.bcebos.com/pic/8c1001e93901213fdc9669b553e736d12f2e9535"
+      ],
       fallback: "#8fa3b0",
       map: "Capela de Nossa Senhora da Penha Macau",
       lat: 22.1865,
@@ -283,8 +350,11 @@ window.TRIP = {
       duration: "1–1.5 小时",
       note: "晚上铁塔整点灯光更好看。台风天室内走廊和商场可当备选。赌场区域注意着装，部分地方限制拍照。",
       xhs: ["澳门巴黎人铁塔", "伦敦人天桥看铁塔", "巴黎人花园"],
-      photo: "The Parisian Macao 30-01-2023(1).jpg",
-      img: "photos/parisian.jpg",
+      photo: "澳门巴黎人",
+      img: "https://bkimg.cdn.bcebos.com/pic/8cb1cb1349540923dd5438cf8801c609b3de9c82e373",
+      imgs: [
+        "https://bkimg.cdn.bcebos.com/pic/8cb1cb1349540923dd5438cf8801c609b3de9c82e373"
+      ],
       fallback: "#3b2d4a",
       map: "The Parisian Macao",
       lat: 22.1454,
@@ -301,8 +371,12 @@ window.TRIP = {
       duration: "30–40 分钟",
       note: "主要为了吃和手信，不是第一出片点。周末下午极挤。晚上灯亮起来更有氛围。看管背包。",
       xhs: ["官也街夜景", "氹仔官也街", "官也街手信"],
-      photo: "Rua do Cunha 19-03-2024.jpg",
-      img: "photos/taipa.jpg",
+      photo: "官也街",
+      img: "https://bkimg.cdn.bcebos.com/pic/4afbfbedab64034fdc06b0ffa5c379310b551d7b",
+      imgs: [
+        "https://bkimg.cdn.bcebos.com/pic/4afbfbedab64034fdc06b0ffa5c379310b551d7b",
+        "https://bkimg.cdn.bcebos.com/pic/8435e5dde71190ef5130f2a1c01b9d16fcfa6080"
+      ],
       fallback: "#5c4033",
       map: "Rua do Cunha Taipa",
       lat: 22.1527,
@@ -335,7 +409,7 @@ window.TRIP = {
         { id: "d1d", time: "12:00", type: "spot", name: "大馆", spotId: "taikwun", cost: 0, detail: "中环旧警察总部改的园区，红砖很好拍。园区免费，不用预约。大约逛 1 小时。里面冷气很足，可带薄外套。" },
         { id: "d1e", time: "13:10", type: "commute", mode: "步行", name: "荷李活道 → 嘉咸街 · 约 8 分钟", lat: 22.2830, lng: 114.1547, cost: 0, detail: "不用坐车。从大馆沿着荷李活道走到嘉咸街，七八分钟就接到半山扶梯。" },
         { id: "d1f", time: "13:20", type: "spot", name: "半山扶梯 · 石板街", spotId: "escalator", cost: 0, detail: "公共扶梯，免费。大约上午 10 点以后是往上走的。拍两张就走，别长时间占台阶。" },
-        { id: "d1g", time: "14:20", type: "meal", name: "午饭 · 兰芳园（中环结志街）", lat: 22.2839, lng: 114.1550, xhs: "兰芳园 中环", cost: 100, img: "photos/lanfong.jpg", photo: "HK 中環 Central 結志街 Gage Street shop Lan Fong Yuen Cafe Restaurant March 2021 SS2.jpg", detail: "中环老茶餐厅，丝袜奶茶有名。不用订座，排队点单。两人午饭大概一人一百出头。吃完可以在附近慢慢走到缆车站。" },
+        { id: "d1g", time: "14:20", type: "meal", name: "午饭 · 兰芳园（中环结志街）", lat: 22.2839, lng: 114.1550, xhs: "兰芳园 中环", cost: 100, img: "https://bkimg.cdn.bcebos.com/pic/fc1f4134970a304e3e1f048ddbc8a786c9175c83", photo: "兰芳园", detail: "中环老茶餐厅，丝袜奶茶有名。不用订座，排队点单。两人午饭大概一人一百出头。吃完可以在附近慢慢走到缆车站。" },
         { id: "d1h", time: "16:00", type: "commute", mode: "山顶缆车", name: "花园道上山（可改 15 路巴士）", lat: 22.2774, lng: 114.1544, cost: 88, detail: "从中环走到花园道缆车站。建议提前网上订山顶缆车；不想订就改坐 15 路巴士，拍八达通，便宜很多。上山是为了走卢吉道看日落，不要只排凌霄阁。买往返票的话，下山不用再买。" },
         { id: "d1i", time: "16:50", type: "spot", name: "卢吉道观景台", spotId: "lugard", cost: 0, detail: "从凌霄阁沿卢吉道走十几分钟，有缺口能看维港日落。8 月底日落大约 18:50，尽量 17:30 后到。山路有蚊，雨天路滑。" },
         { id: "d1j", time: "19:15", type: "commute", mode: "山顶缆车", name: "下山至中环", lat: 22.2774, lng: 114.1544, cost: 0, detail: "原路坐缆车回中环。如果上山买的是往返票，这里不用再花钱。下来后去天星码头坐船。" },
@@ -360,8 +434,8 @@ window.TRIP = {
       beats: [
         { id: "d2a", time: "08:10", type: "commute", mode: "港铁", name: "尖沙咀 → 欣澳 → 迪士尼 · 约 55–70 分钟", lat: 22.3132, lng: 114.0415, cost: 30, detail: "拍八达通。荃湾线从尖沙咀坐到美孚，换成屯马线到欣澳，再换成迪士尼线。全程大约一小时。开园前到比较好拍城堡。" },
         { id: "d2b", time: "09:20", type: "spot", name: "香港迪士尼乐园", spotId: "disney", cost: 699, detail: "门票必须提前在官网或 Klook 买指定日期，8 月底现场很容易没有。进园先拍城堡和美国小镇大街。下载官方 App 看排队。花销按普通日门票估算，实际以你买的票为准。" },
-        { id: "d2c", time: "12:30", type: "meal", name: "午饭 · 美国小镇大街", lat: 22.3136, lng: 114.0428, xhs: "港迪美国小镇大街吃饭", cost: 150, img: "photos/disney-lunch.jpg", photo: "Disneyland Hong Kong - Main Street USA IMG 5510.JPG", detail: "在园内吃，不用订座。中午人多，可以先玩再吃，或看 App 里哪家排队短。一人大约 150 港币。" },
-        { id: "d2d", time: "18:00", type: "meal", name: "晚饭 · 园内", lat: 22.3128, lng: 114.0410, xhs: "香港迪士尼晚餐", cost: 180, img: "photos/disney-dinner.jpg", photo: "Hong Kong Disneyland Castle.jpg", detail: "继续在园内解决。傍晚再拍一版城堡暖光，晚上可看烟花后再走。" },
+        { id: "d2c", time: "12:30", type: "meal", name: "午饭 · 美国小镇大街", lat: 22.3136, lng: 114.0428, xhs: "港迪美国小镇大街吃饭", cost: 150, img: "https://bkimg.cdn.bcebos.com/pic/c8ea15ce36d3d539efd03acb3b87e950342ab0cc", photo: "美国小镇大街", detail: "在园内吃，不用订座。中午人多，可以先玩再吃，或看 App 里哪家排队短。一人大约 150 港币。" },
+        { id: "d2d", time: "18:00", type: "meal", name: "晚饭 · 园内", lat: 22.3128, lng: 114.0410, xhs: "香港迪士尼晚餐", cost: 180, img: "https://bkimg.cdn.bcebos.com/pic/adaf2edda3cc7cd9bcdd3b773701213fb90e91af", photo: "睡美人城堡", detail: "继续在园内解决。傍晚再拍一版城堡暖光，晚上可看烟花后再走。" },
         { id: "d2e", time: "20:30", type: "commute", mode: "港铁", name: "迪士尼 → 尖沙咀 · 约 60 分钟", lat: 22.2976, lng: 114.1722, cost: 30, detail: "原路返回：迪士尼线到欣澳，再转屯马线或东涌线回尖沙咀。大约一小时。拍八达通。" },
         { id: "d2f", time: "21:40", type: "hotel", name: "尖沙咀酒店", lat: 22.2976, lng: 114.1722, detail: "还住尖沙咀，不用换酒店。房费不含在当天花销里。" }
       ]
@@ -384,7 +458,7 @@ window.TRIP = {
         { id: "d3b", time: "08:10", type: "commute", mode: "港铁", name: "尖沙咀 → 旺角 → 太古 · 约 25 分钟", lat: 22.2850, lng: 114.2164, cost: 12, detail: "拍八达通。荃湾线从尖沙咀坐到旺角，换成观塘线到太古。大概 25 分钟。太古站 D 出口走几分钟就是海山楼。" },
         { id: "d3c", time: "08:40", type: "spot", name: "海山楼（怪兽大厦）", spotId: "monster", cost: 0, detail: "这是民居天井，不是景区，免费，也不能预约。安静拍几张就走，别挡路、别喊、别用灯。有人劝离就离开。" },
         { id: "d3d", time: "09:10", type: "commute", mode: "港铁", name: "太古 → 旺角 · 约 20 分钟", lat: 22.3193, lng: 114.1697, cost: 10, detail: "观塘线从太古坐回旺角，大约 20 分钟。去富临吃早茶。" },
-        { id: "d3e", time: "09:40", type: "meal", name: "早茶 · 富临饭店（旺角）", lat: 22.3178, lng: 114.1702, xhs: "富临饭店 旺角", cost: 180, img: "photos/fulum.jpg", photo: "Fung Lum Restaurant (Hong Kong) 01.jpg", detail: "旺角茶楼，推车点心。周末建议提前订位，不然要排队。两人早茶大概一人 150–200 港币。" },
+        { id: "d3e", time: "09:40", type: "meal", name: "早茶 · 富临饭店（旺角）", lat: 22.3178, lng: 114.1702, xhs: "富临饭店 旺角", cost: 180, img: "https://bkimg.cdn.bcebos.com/pic/0e2442a7d933c895d143a86e1d4864f082025aafaa29", photo: "富临饭店", detail: "旺角茶楼，推车点心。周末建议提前订位，不然要排队。两人早茶大概一人 150–200 港币。" },
         { id: "d3f", time: "11:00", type: "spot", name: "弥敦道天桥", spotId: "mongkok", cost: 0, detail: "旺角站附近天桥，免费拍街景和车流。人多，看管背包，别长时间挡路。" },
         { id: "d3g", time: "12:10", type: "commute", mode: "港铁 + 步行", name: "旺角 → 中环，再走到上环码头 · 约 25 分钟", lat: 22.2878, lng: 114.1512, cost: 10, detail: "荃湾线从旺角坐到中环，出站再走到上环港澳码头。带着行李的话走慢一点。船票提前买好，到码头换票进闸。" },
         { id: "d3h", time: "13:00", type: "commute", mode: "喷射飞航", name: "上环 → 澳门外港 · 约 60 分钟", lat: 22.1967, lng: 113.5595, cost: 210, detail: "坐船去澳门。上环港澳码头上船，大约 1 小时到澳门外港客运码头。票要提前在官网或携程买，尽量可改签。周末容易满。船上有座位，行李放脚边或行李架。" },
@@ -392,7 +466,7 @@ window.TRIP = {
         { id: "d3j", time: "14:40", type: "spot", name: "主教山小堂", spotId: "penha", cost: 0, detail: "小堂和观景台免费，不用预约。能看海，人比大三巴少。进堂衣着端庄。山路有点陡。" },
         { id: "d3k", time: "16:40", type: "commute", mode: "的士", name: "主教山 → 路氹巴黎人 · 约 20 分钟", lat: 22.1454, lng: 113.5636, cost: 80, share: true, detail: "再打车去路氹的巴黎人。大约 20 分钟。同样先问打表，按一辆车算。" },
         { id: "d3l", time: "17:10", type: "spot", name: "巴黎人 · 伦敦人", spotId: "parisian", cost: 0, detail: "酒店公共区域免费进。巴黎人花园大约 10 点开门。晚上铁塔灯光更好看。赌场里部分地方不能拍。" },
-        { id: "d3m", time: "20:30", type: "meal", name: "晚饭 · 巴黎人 / 伦敦人", lat: 22.1458, lng: 113.5628, xhs: "澳门巴黎人餐厅", cost: 150, img: "photos/parisian.jpg", photo: "The Parisian Macao 30-01-2023(1).jpg", detail: "在商场里找家餐厅就行，不用订米其林。一人大约 150 港币。澳门能直接用港币或支付宝。" },
+        { id: "d3m", time: "20:30", type: "meal", name: "晚饭 · 巴黎人 / 伦敦人", lat: 22.1458, lng: 113.5628, xhs: "澳门巴黎人餐厅", cost: 150, img: "https://bkimg.cdn.bcebos.com/pic/8cb1cb1349540923dd5438cf8801c609b3de9c82e373", photo: "澳门巴黎人", detail: "在商场里找家餐厅就行，不用订米其林。一人大约 150 港币。澳门能直接用港币或支付宝。" },
         { id: "d3n", time: "21:30", type: "commute", mode: "的士", name: "路氹 → 官也街 · 约 10 分钟", lat: 22.1527, lng: 113.5559, cost: 50, share: true, detail: "酒店接驳车如果有，免费；没有就打的，十来分钟。按一辆车算。" },
         { id: "d3o", time: "21:40", type: "spot", name: "官也街", spotId: "taipa", cost: 0, detail: "氹仔老街，买手信、吃点心。晚上灯亮起来更有氛围。主要不是拍大片的地方，看管背包。" },
         { id: "d3p", time: "22:20", type: "hotel", name: "路氹酒店", lat: 22.1458, lng: 113.5628, detail: "今晚住路氹，方便铁塔，明天清晨打的去大三巴。房费不含在当天花销里。" }
@@ -418,7 +492,7 @@ window.TRIP = {
         { id: "d4d", time: "08:42", type: "spot", name: "恋爱巷", spotId: "paixao", cost: 0, detail: "很短的一条巷，免费。排队拍照请快。旁边疯堂斜巷人更少。" },
         { id: "d4e", time: "09:10", type: "commute", mode: "步行", name: "大三巴街下山 · 约 8 分钟", lat: 22.1935, lng: 113.5399, cost: 0, detail: "沿着大三巴街往下走就到议事亭前地。同一条步行线，不用打车。" },
         { id: "d4f", time: "09:20", type: "spot", name: "议事亭前地 · 玫瑰堂", spotId: "senado", cost: 0, detail: "波浪纹地面和玫瑰堂，免费。玫瑰堂里保持安静，不要开闪光灯。" },
-        { id: "d4g", time: "10:20", type: "meal", name: "猪扒包 · 大利来（议事亭附近）", lat: 22.1938, lng: 113.5405, xhs: "大利来猪扒包", cost: 40, img: "photos/tailei.jpg", photo: "TAI LEI LOI KEI, Macau, 招牌豬扒飽, 澳門大利來記豬扒飽, 大三巴街, 澳門 (17103261017).jpg", detail: "议事亭附近的猪扒包店，不用订，排队买。一个大约几十港币，当早点刚好。" },
+        { id: "d4g", time: "10:20", type: "meal", name: "猪扒包 · 大利来（议事亭附近）", lat: 22.1938, lng: 113.5405, xhs: "大利来猪扒包", cost: 40, img: "https://bkimg.cdn.bcebos.com/pic/72f082025aafa40f4bfbdc331a35144f78f0f636b386", photo: "大利来记", detail: "议事亭附近的猪扒包店，不用订，排队买。一个大约几十港币，当早点刚好。" },
         { id: "d4h", time: "11:30", type: "commute", mode: "的士", name: "议事亭 → 外港码头 · 约 12 分钟", lat: 22.1967, lng: 113.5595, cost: 50, share: true, detail: "打车去外港客运码头坐船。大约 12 分钟。按一辆车算。提前留一点时间换票进闸。" },
         { id: "d4i", time: "12:00", type: "commute", mode: "喷射飞航", name: "澳门外港 → 蛇口 · 约 60 分钟", lat: 22.4792, lng: 113.9128, cost: 210, detail: "坐船回深圳蛇口邮轮母港，大约 1 小时。票要提前买。过关后就是深圳，不用再进香港。回北京机票不要订太晚。" },
         { id: "d4j", time: "13:10", type: "commute", mode: "过关步行", name: "蛇口邮轮母港过关", lat: 22.4792, lng: 113.9128, cost: 0, detail: "下船后过香港以外的回内地边检，用通行证 + 深圳边检。出关后可以坐深圳地铁去机场或找朋友。" }
