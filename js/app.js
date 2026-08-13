@@ -50,15 +50,28 @@ function wikiPhoto(file) {
   return `photos/${photoSlug(file)}`;
 }
 
+const PHOTO_HOST = "https://gitee.com/wlc-qc/trip2-hkmo/raw/master/";
+
+function isLocalHost() {
+  const host = location.hostname;
+  return !host || host === "localhost" || host === "127.0.0.1";
+}
+
+function hostedPhoto(path) {
+  if (!path) return "";
+  if (/^https?:\/\//i.test(path) || isLocalHost()) return path;
+  return PHOTO_HOST + path.replace(/^\//, "");
+}
+
 function photoSrc(item) {
   if (!item) return "";
-  if (item.img) return item.img;
-  if (item.spotId) {
+  let path = "";
+  if (item.img) path = item.img;
+  else if (item.spotId) {
     const spot = TRIP.spots.find((s) => s.id === item.spotId);
-    if (spot && spot.img) return spot.img;
-  }
-  if (item.photo) return wikiPhoto(item.photo);
-  return "";
+    if (spot && spot.img) path = spot.img;
+  } else if (item.photo) path = wikiPhoto(item.photo);
+  return hostedPhoto(path);
 }
 
 function wikiFile(file) {
@@ -113,13 +126,7 @@ function beatLatLng(beat) {
 }
 
 function beatPhoto(beat) {
-  if (beat.img) return beat.img;
-  if (beat.spotId) {
-    const spot = TRIP.spots.find((s) => s.id === beat.spotId);
-    if (spot && spot.img) return spot.img;
-  }
-  if (beat.photo) return wikiPhoto(beat.photo);
-  return "";
+  return photoSrc(beat);
 }
 
 function pinLabel(beat) {
