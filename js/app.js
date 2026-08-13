@@ -37,14 +37,44 @@ function beatXhs(beat) {
   return "";
 }
 
+function photoSlug(file) {
+  return String(file)
+    .replace(/[\\/:*?"<>|]+/g, "")
+    .replace(/\s+/g, "_")
+    .replace(/_+/g, "_");
+}
+
+function wikiPhoto(file) {
+  if (!file) return "";
+  if (file.startsWith("photos/") || file.startsWith("img/")) return file;
+  return `photos/${photoSlug(file)}`;
+}
+
+function photoSrc(item) {
+  if (!item) return "";
+  if (item.img) return item.img;
+  if (item.spotId) {
+    const spot = TRIP.spots.find((s) => s.id === item.spotId);
+    if (spot && spot.img) return spot.img;
+  }
+  if (item.photo) return wikiPhoto(item.photo);
+  return "";
+}
+
+function wikiFile(file) {
+  if (!file) return "https://commons.wikimedia.org/";
+  return `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(file)}`;
+}
+
 function renderSpots() {
   const spots = TRIP.spots.filter(matches);
   grid.innerHTML = spots
     .map((spot) => {
+      const src = photoSrc(spot);
       return `
         <button class="spot-card" data-id="${spot.id}">
-          <div class="thumb" style="background:${spot.fallback}">
-            <div class="thumb-mark">小红书实拍</div>
+          <div class="thumb">
+            ${src ? `<img src="${src}" alt="${spot.name}" loading="lazy" />` : ""}
             <div class="badge-row">
               <span class="badge">${spot.city === "hk" ? "香港" : "澳门"}</span>
               <span class="badge gold">${spot.area}</span>
@@ -66,6 +96,7 @@ let activeBeatId = "";
 let planMap = null;
 let planLayer = null;
 let planLine = null;
+let planHighlight = null;
 let planMarkers = {};
 
 function currentDay() {
@@ -81,6 +112,68 @@ function beatLatLng(beat) {
   return null;
 }
 
+function beatPhoto(beat) {
+  if (beat.img) return beat.img;
+  if (beat.spotId) {
+    const spot = TRIP.spots.find((s) => s.id === beat.spotId);
+    if (spot && spot.img) return spot.img;
+  }
+  if (beat.photo) return wikiPhoto(beat.photo);
+  return "";
+}
+
+function pinLabel(beat) {
+  if (beat.spotId) {
+    const spot = TRIP.spots.find((s) => s.id === beat.spotId);
+    if (spot) return spot.name;
+  }
+  const rest = beat.name.includes("·") ? beat.name.split("·").pop().trim() : beat.name;
+  return rest.replace(/（.*）/g, "").replace(/\(.*\)/g, "").trim();
+}
+
+function mappedBeats(day) {
+  return day.beats
+    .map((beat) => ({ beat, ll: beatLatLng(beat) }))
+    .filter((x) => x.ll);
+}
+
+function samePoint(a, b) {
+  if (!a || !b) return false;
+  return Math.abs(a[0] - b[0]) < 0.0008 && Math.abs(a[1] - b[1]) < 0.0008;
+}
+
+function previousDayEnd(day) {
+  const i = TRIP.days.findIndex((d) => d.id === day.id);
+  for (let d = i - 1; d >= 0; d--) {
+    const mapped = mappedBeats(TRIP.days[d]);
+    if (mapped.length) return mapped[mapped.length - 1].ll;
+  }
+  return null;
+}
+
+function commuteSegment(day, beat) {
+  const mapped = mappedBeats(day);
+  const i = mapped.findIndex((x) => x.beat.id === beat.id);
+  if (i < 0) return null;
+  const end = mapped[i].ll;
+  let start = null;
+  for (let j = i - 1; j >= 0; j--) {
+    if (!samePoint(mapped[j].ll, end)) {
+      start = mapped[j].ll;
+      break;
+    }
+  }
+  if (!start) {
+    const prev = previousDayEnd(day);
+    if (prev && !samePoint(prev, end)) start = prev;
+  }
+  if (start) return [start, end];
+  for (let j = i + 1; j < mapped.length; j++) {
+    if (!samePoint(mapped[j].ll, end)) return [end, mapped[j].ll];
+  }
+  return null;
+}
+
 function renderDayTabs() {
   dayTabsEl.innerHTML = TRIP.days
     .map(
@@ -90,16 +183,69 @@ function renderDayTabs() {
     .join("");
 }
 
+function beatCostEach(beat) {
+  if (beat.cost == null) return 0;
+  if (beat.share) return beat.cost / 2;
+  return beat.cost;
+}
+
+function formatCost(beat) {
+  if (beat.cost == null) return "—";
+  if (beat.cost === 0) return "免费";
+  if (beat.share) return `约 ${beat.cost} / 车`;
+  return `约 ${beat.cost}`;
+}
+
+function dayCost(day) {
+  const per = Math.round(day.beats.reduce((sum, b) => sum + beatCostEach(b), 0));
+  return { per, two: per * 2 };
+}
+
+function beatDetailText(beat) {
+  if (beat.detail) return beat.detail;
+  if (beat.spotId) {
+    const spot = TRIP.spots.find((s) => s.id === beat.spotId);
+    if (spot) return `${spot.enter}建议停留 ${spot.duration}。${spot.note}`;
+  }
+  return "点这一行，右侧地图会标出大概位置。";
+}
+
+function renderBeatDetail() {
+  const el = document.getElementById("beat-detail");
+  if (!el) return;
+  const day = currentDay();
+  const beat = day.beats.find((b) => b.id === activeBeatId) || day.beats[0];
+  if (!beat) {
+    el.innerHTML = "";
+    return;
+  }
+  const xhs = beatXhs(beat);
+  const mode = beat.mode ? ` · ${beat.mode}` : "";
+  el.innerHTML = `
+    <div class="k">${beat.time} · ${TYPE_LABEL[beat.type] || ""}${mode}</div>
+    <h3>${beat.name}</h3>
+    <p class="beat-cost">基础花销：${formatCost(beat)}${beat.cost ? " 港币" : ""}</p>
+    <p>${beatDetailText(beat)}</p>
+    ${
+      xhs
+        ? `<p><a class="xhs-inline" href="${xhsUrl(xhs)}" target="_blank" rel="noreferrer" data-xhs>小红书上看看</a></p>`
+        : ""
+    }
+  `;
+}
+
 function renderDayOverview() {
   const el = document.getElementById("day-overview");
   if (!el) return;
   const day = currentDay();
   const prep = day.prep || [];
+  const cost = dayCost(day);
   el.innerHTML = `
     <div class="day-nodes">
       <div class="day-node"><span class="k">从哪出发</span><strong>${day.from || "—"}</strong></div>
       <div class="day-node"><span class="k">当天去哪</span><strong>${day.where || "—"}</strong></div>
       <div class="day-node"><span class="k">晚上住哪</span><strong>${day.stay || "—"}</strong></div>
+      <div class="day-node day-node-cost"><span class="k">当日花销预估</span><strong>人均约 ${cost.per}</strong><small>两人约 ${cost.two} 港币，不含酒店</small></div>
     </div>
     <p class="day-path">${day.path || ""}</p>
     ${
@@ -155,34 +301,46 @@ function renderPlanTable() {
   const day = currentDay();
   planTableEl.innerHTML = `
     <thead>
-      <tr><th>时间</th><th>类型</th><th>内容</th></tr>
+      <tr><th>时间</th><th>类型</th><th>内容</th><th>花销（港币）</th></tr>
     </thead>
     <tbody>
       ${day.beats
-        .map(
-          (b) => `
+        .map((b) => {
+          const mode = b.mode ? `<span class="mode">${b.mode}</span>` : "";
+          const xhs = beatXhs(b)
+            ? ` <a class="xhs-inline" href="${xhsUrl(beatXhs(b))}" target="_blank" rel="noreferrer" data-xhs>小红书</a>`
+            : "";
+          return `
         <tr class="plan-row ${b.type}${b.id === activeBeatId ? " is-on" : ""}" data-beat="${b.id}">
           <td class="plan-time">${b.time}</td>
           <td><span class="kind kind-${b.type}">${TYPE_LABEL[b.type]}</span></td>
-          <td>${b.name}${
-            beatXhs(b)
-              ? ` <a class="xhs-inline" href="${xhsUrl(beatXhs(b))}" target="_blank" rel="noreferrer" data-xhs>小红书</a>`
-              : ""
-          }</td>
-        </tr>`
-        )
+          <td>${mode}${b.name}${xhs}</td>
+          <td class="plan-cost">${formatCost(b)}</td>
+        </tr>`;
+        })
         .join("")}
     </tbody>`;
 }
 
-function planIcon(beat, index, on) {
-  const n = index + 1;
+function planIcon(on) {
   return L.divIcon({
     className: "",
-    html: `<div class="plan-pin ${beat.type}${on ? " is-on" : ""}"><span></span><b>${n}</b></div>`,
+    html: `<div class="plan-pin hotel${on ? " is-on" : ""}"><span></span><b>住</b></div>`,
     iconSize: [30, 38],
-    iconAnchor: [15, 36],
-    popupAnchor: [0, -32]
+    iconAnchor: [15, 36]
+  });
+}
+
+function photoIcon(beat, on) {
+  const src = beatPhoto(beat);
+  const label = pinLabel(beat);
+  return L.divIcon({
+    className: "",
+    html: `<div class="photo-pin ${beat.type}${on ? " is-on" : ""}">${
+      src ? `<img src="${src}" alt="${label}" />` : ""
+    }<span class="tag">${label}</span></div>`,
+    iconSize: [54, 62],
+    iconAnchor: [27, 58]
   });
 }
 
@@ -191,29 +349,63 @@ function renderPlanMap(mode) {
   const day = currentDay();
   planLayer.clearLayers();
   planMarkers = {};
-  const pts = [];
-  day.beats.forEach((beat, i) => {
-    const ll = beatLatLng(beat);
-    if (!ll) return;
-    pts.push(ll);
+  if (planLine) planMap.removeLayer(planLine);
+  if (planHighlight) planMap.removeLayer(planHighlight);
+  planLine = null;
+  planHighlight = null;
+
+  const mapped = mappedBeats(day);
+  const pts = mapped.map((x) => x.ll);
+  if (pts.length > 1) {
+    planLine = L.polyline(pts, {
+      color: "#6a736c",
+      weight: 3,
+      opacity: 0.42,
+      dashArray: "7 7"
+    }).addTo(planMap);
+  }
+
+  mapped.forEach(({ beat, ll }) => {
+    if (beat.type === "commute") return;
     const on = beat.id === activeBeatId;
-    const marker = L.marker(ll, { icon: planIcon(beat, i, on), zIndexOffset: on ? 600 : 0 });
-    marker.bindPopup(`<strong>${beat.time}</strong><br>${beat.name}`);
-    marker.on("click", () => focusBeat(beat.id, true));
+    const icon = beat.type === "hotel" ? planIcon(on) : photoIcon(beat, on);
+    const marker = L.marker(ll, {
+      icon,
+      zIndexOffset: on ? 800 : beat.type === "hotel" ? 0 : 240
+    });
+    marker.on("click", () => {
+      focusBeat(beat.id, true);
+      if (beat.type === "spot" || beat.type === "meal") openBeatSheet(beat);
+    });
     marker.addTo(planLayer);
     planMarkers[beat.id] = marker;
   });
-  if (planLine) planMap.removeLayer(planLine);
-  planLine = null;
-  if (pts.length > 1) {
-    planLine = L.polyline(pts, { color: "#b85c38", weight: 3, opacity: 0.55, dashArray: "7 7" }).addTo(planMap);
-  }
+
   const active = day.beats.find((b) => b.id === activeBeatId);
-  const activeLl = active ? beatLatLng(active) : null;
-  if (mode === "focus" && activeLl) {
-    planMap.flyTo(activeLl, Math.max(planMap.getZoom() || 14, 15), { duration: 0.45 });
-    const m = planMarkers[activeBeatId];
-    if (m) m.openPopup();
+  if (active && active.type === "commute") {
+    const seg = commuteSegment(day, active);
+    if (seg) {
+      planHighlight = L.polyline(seg, {
+        color: "#b85c38",
+        weight: 6,
+        opacity: 0.92
+      }).addTo(planMap);
+    }
+  }
+
+  if (mode === "focus" && active) {
+    if (active.type === "commute") {
+      const seg = commuteSegment(day, active);
+      if (seg) {
+        planMap.fitBounds(L.latLngBounds(seg), { padding: [48, 48], maxZoom: 15, animate: true });
+      } else {
+        const ll = beatLatLng(active);
+        if (ll) planMap.flyTo(ll, Math.max(planMap.getZoom() || 14, 14), { duration: 0.45 });
+      }
+    } else {
+      const ll = beatLatLng(active);
+      if (ll) planMap.flyTo(ll, Math.max(planMap.getZoom() || 14, 15), { duration: 0.45 });
+    }
   } else if (pts.length) {
     planMap.fitBounds(L.latLngBounds(pts), { padding: [36, 36], maxZoom: 14 });
   }
@@ -223,6 +415,7 @@ function renderPlanMap(mode) {
 function focusBeat(id, scroll) {
   activeBeatId = id;
   renderPlanTable();
+  renderBeatDetail();
   renderPlanMap("focus");
   if (scroll) {
     const row = planTableEl.querySelector(`[data-beat="${id}"]`);
@@ -237,6 +430,7 @@ function renderDays() {
   }
   renderDayTabs();
   renderDayOverview();
+  renderBeatDetail();
   renderPlanTable();
   renderPlanMap("day");
 }
@@ -274,22 +468,19 @@ function openSpot(id) {
   if (!spot) return;
   const saved = liked.has(spot.id);
   const keywords = spot.xhs || [];
+  const src = photoSrc(spot);
   modal.hidden = false;
   modal.classList.add("is-open");
   modal.innerHTML = `
     <div class="sheet">
-      <div class="sheet-xhs">
-        <div class="xhs-kicker">小红书实拍</div>
-        <p>笔记图不能直接嵌进页面。点关键词，打开小红书看最新实拍和机位。</p>
-        <div class="xhs-chips">
-          ${keywords
-            .map(
-              (kw) =>
-                `<a href="${xhsUrl(kw)}" target="_blank" rel="noreferrer">${kw}</a>`
-            )
-            .join("")}
-        </div>
-      </div>
+      ${
+        src
+          ? `<div class="sheet-photo">
+        <img src="${src}" alt="${spot.name}" />
+        <a class="photo-credit" href="${wikiFile(spot.photo)}" target="_blank" rel="noreferrer">图：维基共享资源</a>
+      </div>`
+          : ""
+      }
       <div class="sheet-body">
         <button class="close" type="button" data-close>×</button>
         <div class="en">${spot.city === "hk" ? "Hong Kong" : "Macao"} · ${spot.area}</div>
@@ -300,8 +491,18 @@ function openSpot(id) {
           <dt>时长</dt><dd>${spot.duration}</dd>
           <dt>注意</dt><dd>${spot.note}</dd>
         </dl>
+        ${
+          keywords.length
+            ? `<div class="sheet-xhs-links">
+          <div class="xhs-kicker">小红书</div>
+          <div class="xhs-chips">
+            ${keywords.map((kw) => `<a href="${xhsUrl(kw)}" target="_blank" rel="noreferrer">${kw}</a>`).join("")}
+          </div>
+        </div>`
+            : ""
+        }
         <div class="actions">
-          <button class="btn primary" data-like="${spot.id}">${saved ? "已收藏" : "收藏这个机位"}</button>
+          <button class="btn primary" data-like="${spot.id}">${saved ? "已收藏" : "收藏这个点"}</button>
           ${
             keywords[0]
               ? `<a class="btn ghost" target="_blank" rel="noreferrer" href="${xhsUrl(keywords[0])}">打开小红书</a>`
@@ -317,6 +518,46 @@ function closeModal() {
   modal.classList.remove("is-open");
   modal.hidden = true;
   modal.innerHTML = "";
+}
+
+function openBeatSheet(beat) {
+  if (!beat) return;
+  if (beat.spotId) {
+    openSpot(beat.spotId);
+    return;
+  }
+  const src = photoSrc(beat);
+  const xhs = beatXhs(beat);
+  modal.hidden = false;
+  modal.classList.add("is-open");
+  modal.innerHTML = `
+    <div class="sheet">
+      ${
+        src
+          ? `<div class="sheet-photo">
+        <img src="${src}" alt="${beat.name}" />
+        <a class="photo-credit" href="${wikiFile(beat.photo)}" target="_blank" rel="noreferrer">图：维基共享资源</a>
+      </div>`
+          : ""
+      }
+      <div class="sheet-body">
+        <button class="close" type="button" data-close>×</button>
+        <div class="en">${TYPE_LABEL[beat.type] || ""} · ${beat.time}${beat.mode ? " · " + beat.mode : ""}</div>
+        <h2>${beat.name}</h2>
+        <p class="beat-cost">基础花销：${formatCost(beat)}${beat.cost ? " 港币" : ""}</p>
+        <p>${beatDetailText(beat)}</p>
+        ${
+          xhs
+            ? `<div class="sheet-xhs-links">
+          <div class="xhs-kicker">小红书</div>
+          <div class="xhs-chips">
+            <a href="${xhsUrl(xhs)}" target="_blank" rel="noreferrer">${xhs}</a>
+          </div>
+        </div>`
+            : ""
+        }
+      </div>
+    </div>`;
 }
 
 filtersEl.addEventListener("click", (e) => {
@@ -364,13 +605,15 @@ function citySpots() {
   return TRIP.spots.filter((spot) => spot.city === mapCity);
 }
 
-function pinIcon(index, city) {
+function pinIcon(spot, on) {
+  const src = photoSrc(spot);
   return L.divIcon({
     className: "",
-    html: `<div class="map-pin ${city}"><span></span><b>${index}</b></div>`,
-    iconSize: [32, 42],
-    iconAnchor: [16, 40],
-    popupAnchor: [0, -36]
+    html: `<div class="photo-pin map spot ${spot.city}${on ? " is-on" : ""}">${
+      src ? `<img src="${src}" alt="${spot.name}" />` : ""
+    }<span class="tag">${spot.name}</span></div>`,
+    iconSize: [56, 66],
+    iconAnchor: [28, 62]
   });
 }
 
@@ -379,7 +622,7 @@ function renderMapCityFilters() {
     .map(
       (city) =>
         `<button class="chip${city === mapCity ? " is-on" : ""}" data-map-city="${city}">${
-          city === "hk" ? "香港机位" : "澳门机位"
+          city === "hk" ? "香港打卡点" : "澳门打卡点"
         }</button>`
     )
     .join("");
@@ -387,14 +630,14 @@ function renderMapCityFilters() {
 
 function renderAtlasList(spots) {
   if (!spots.length) {
-    atlasList.innerHTML = `<p style="margin:12px 8px;color:var(--muted);font-size:14px;">当前筛选下这座城市没有机位，试试换筛选或切到另一边。</p>`;
+    atlasList.innerHTML = `<p style="margin:12px 8px;color:var(--muted);font-size:14px;">当前筛选下这座城市没有打卡点，试试换筛选或切到另一边。</p>`;
     return;
   }
   atlasList.innerHTML = spots
     .map(
       (spot, i) => `
       <button class="atlas-item ${spot.city}${spot.id === activeMapId ? " is-on" : ""}" data-map-id="${spot.id}">
-        <span class="n">${i + 1}</span>
+        <span class="n">${spot.img || spot.photo ? `<img src="${photoSrc(spot)}" alt="" />` : i + 1}</span>
         <span>
           <h3>${spot.name}</h3>
           <small>${spot.area} · ${spot.en}</small>
@@ -426,12 +669,16 @@ function renderMap() {
   const spots = citySpots();
   markerLayer.clearLayers();
   markersById = {};
-  spots.forEach((spot, i) => {
-    const marker = L.marker([spot.lat, spot.lng], { icon: pinIcon(i + 1, spot.city) });
-    marker.bindPopup(popupHtml(spot));
+  spots.forEach((spot) => {
+    const marker = L.marker([spot.lat, spot.lng], {
+      icon: pinIcon(spot, spot.id === activeMapId),
+      zIndexOffset: spot.id === activeMapId ? 800 : 0
+    });
     marker.on("click", () => {
       activeMapId = spot.id;
+      refreshAtlasIcons();
       renderAtlasList(spots);
+      openSpot(spot.id);
     });
     marker.addTo(markerLayer);
     markersById[spot.id] = marker;
@@ -441,14 +688,25 @@ function renderMap() {
   requestAnimationFrame(() => leafletMap.invalidateSize());
 }
 
+function refreshAtlasIcons() {
+  citySpots().forEach((spot) => {
+    const marker = markersById[spot.id];
+    if (marker) {
+      marker.setIcon(pinIcon(spot, spot.id === activeMapId));
+      marker.setZIndexOffset(spot.id === activeMapId ? 800 : 0);
+    }
+  });
+}
+
 function focusSpot(id) {
   const spots = citySpots();
   const spot = spots.find((s) => s.id === id);
   if (!spot || !markersById[id]) return;
   activeMapId = id;
+  refreshAtlasIcons();
   renderAtlasList(spots);
   leafletMap.flyTo([spot.lat, spot.lng], Math.max(leafletMap.getZoom(), 16), { duration: 0.6 });
-  markersById[id].openPopup();
+  openSpot(id);
 }
 
 function initMap() {
@@ -572,5 +830,30 @@ document.querySelector(".app").addEventListener("click", (e) => {
 });
 
 window.addEventListener("popstate", () => showPanel(currentPanel(), false));
+
+function resizeMaps() {
+  if (planMap) planMap.invalidateSize();
+  if (leafletMap) leafletMap.invalidateSize();
+}
+
+function setSidebarCollapsed(collapsed) {
+  const app = document.querySelector(".app");
+  const btn = document.querySelector(".side-toggle");
+  app.classList.toggle("is-side-collapsed", collapsed);
+  if (btn) {
+    btn.setAttribute("aria-expanded", collapsed ? "false" : "true");
+    btn.title = collapsed ? "展开侧栏" : "折叠侧栏";
+  }
+  localStorage.setItem("side-collapsed", collapsed ? "1" : "0");
+  requestAnimationFrame(() => requestAnimationFrame(resizeMaps));
+}
+
+const sideToggle = document.querySelector(".side-toggle");
+if (sideToggle) {
+  sideToggle.addEventListener("click", () => {
+    setSidebarCollapsed(!document.querySelector(".app").classList.contains("is-side-collapsed"));
+  });
+}
+setSidebarCollapsed(localStorage.getItem("side-collapsed") === "1");
 
 showPanel(currentPanel(), false);
